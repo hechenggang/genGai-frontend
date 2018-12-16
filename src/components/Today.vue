@@ -188,7 +188,11 @@ export default {
   padding: 50px;
   margin: 0;
 }
-
+@media screen and (max-width: 720px){
+  .today {
+    padding: 10px;
+  }
+}
 .content {
   width: 100%;
   padding: 0.5rem;

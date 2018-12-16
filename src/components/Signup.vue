@@ -9,7 +9,12 @@
         <input v-model="password" class="input" type="password" placeholder="密码">
         <input v-model="password2" class="input" type="password" placeholder="重复密码">
         <p class="check">
-          <span>
+          <span v-if="!question">
+            <p class="question">
+              <img src="../assets/wait.gif">
+            </p>
+          </span>
+          <span v-if="question">
             <p class="question">{{question}} =</p>
             <input v-model="answer" class="answer" type="text">
           </span>
@@ -181,15 +186,22 @@ export default {
   outline: none;
 }
 
+.check {
+  margin: 0;
+  padding: 0 .2rem;
+  line-height: 25px;
+  height: 25px;
+}
+
+
 .question {
   margin: 0;
   display: inline-block;
-  padding: 0 0.2rem;
+  padding: 0 5px;
 }
 
-.check {
-  margin: 0;
-  padding: 0.2rem;
+.question img {
+  width: 25px;
 }
 
 .answer {
@@ -206,12 +218,13 @@ export default {
 
 .btn {
   float: right;
+  height: 25px;
 }
 
 .btn p {
-  margin: 0;
+  height: 25px;
+  margin: 0;padding: 0 5px;
   display: inline-block;
-  padding: 0 0.2rem;
   border: 1px solid rgba(45, 45, 45, 0.98);
   cursor: pointer;
 }

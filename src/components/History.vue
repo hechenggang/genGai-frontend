@@ -103,6 +103,11 @@ export default {
   margin: 0;
   overflow-y: auto;
 }
+@media screen and (max-width: 720px){
+  .history {
+    padding: 10px;
+  }
+}
 .day {
   position: relative;
   list-style: none;
