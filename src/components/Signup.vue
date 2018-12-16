@@ -9,13 +9,15 @@
         <input v-model="password" class="input" type="password" placeholder="密码">
         <input v-model="password2" class="input" type="password" placeholder="重复密码">
         <p class="check">
-          <span v-if="!question">
+          <span v-if="!id">
             <p class="question">
               <img src="../assets/wait.gif">
             </p>
           </span>
-          <span v-if="question">
-            <p class="question">{{question}} =</p>
+          <span v-if="id">
+            <p class="question">
+              <img :src="Config.API.gateway+Config.API.get_verification_img+id">
+            </p>
             <input v-model="answer" class="answer" type="text">
           </span>
           <span class="btn">
@@ -40,13 +42,13 @@ export default {
   },
   data: function() {
     return {
-      question: "",
       id: "",
       mail: "",
       password: "",
       password2: "",
       answer: "",
-      notice: ""
+      notice: "",
+      Config: Config
     };
   },
   watch: {
@@ -201,7 +203,7 @@ export default {
 }
 
 .question img {
-  width: 25px;
+  height: 25px;
 }
 
 .answer {
