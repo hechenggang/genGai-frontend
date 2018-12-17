@@ -24,4 +24,8 @@ body {
   font-family: "SF Pro SC","SF Pro Text","SF Pro Icons","PingFang SC","Helvetica Neue","Helvetica","Arial",sans-serif;
 
 }
+a {
+  text-decoration: none;
+  color: rgba(45, 45, 45, 0.98);
+}
 </style>

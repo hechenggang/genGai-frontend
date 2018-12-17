@@ -12,8 +12,8 @@ export default {
   data: function() {
     return {
       funcs:[
-        {name:'今天',target:'/today'},
-        {name:'历史',target:'/history'}
+        {name:'今日',target:'/today'},
+        {name:'往日',target:'/history'}
       ],
     };
   }

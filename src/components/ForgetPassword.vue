@@ -5,7 +5,8 @@
       <p v-if="notice" class="notice">{{notice}}</p>
       <div class="input-box">
         <p class="title">
-          <span>登录</span>
+          <span>找回密码</span>|
+          <span class="small-text">登录</span>
         </p>
         <input v-model="mail" class="input" type="text" placeholder="邮箱">
         <input v-model="password" class="input" type="password" placeholder="密码">
@@ -21,10 +22,9 @@
             </p>
             <input v-model="answer" class="answer" type="text">
           </span>
-          <a class="btn_01" @click="login">登录</a>
-        </p>
-        <p class="small-text">
-            <router-link to="/forget">忘记密码？</router-link>
+          <span class="btn">
+            <p @click="login">登录</p>
+          </span>
         </p>
       </div>
     </div>
@@ -125,7 +125,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .main {
   position: fixed;
   top: 50px;
@@ -168,28 +168,25 @@ export default {
 
 .input {
   margin: 0;
+  padding: 0.5rem;
   font-size: 1rem;
   margin-bottom: 0.5rem;
-  border-radius: 0;
   width: 100%;
   outline: none;
 }
 
 .check {
-  position: relative;
   margin: 0;
+  padding: 0 .2rem;
+  line-height: 25px;
   height: 25px;
 }
 
+
 .question {
   margin: 0;
-  padding: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 63px;
-  height: 25px;
-  
+  display: inline-block;
+  padding: 0 5px;
 }
 
 .question img {
@@ -197,44 +194,31 @@ export default {
 }
 
 .answer {
-  position: absolute;
-  top: 0;
-  left: 68px;
-  width: 35px;
-  height: 30px;
-
-  font-size: 15px;
+  margin-left: 0.2rem;
+  padding: 0.2rem;
+  font-size: 1rem;
   text-align: center;
-  padding: 2.5px;
+  width: 10%;
   outline: none;
   border: none;
-  border-radius: 0;
   background-color: transparent;
-  border-bottom: 1px solid rgba(45, 45, 45, 0.2);
+  border-bottom: 1px solid rgba(45, 45, 45, 0.98);
 }
 
-.btn_01 {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40px;
+.btn {
+  float: right;
   height: 25px;
-  
-  margin: 0;
-  padding: 0 2.5px;
-  font-size: 15px;
-  border: 1px solid rgba(45, 45, 45, 0.5);
+}
+
+.btn p {
+  height: 25px;
+  margin: 0;padding: 0 5px;
+  display: inline-block;
+  border: 1px solid rgba(45, 45, 45, 0.98);
   cursor: pointer;
-  text-align: center;
 }
 
 .small-text {
-  border-top: 1px solid rgba(45, 45, 45, 0.2);
-  padding: 5px;
-  margin-top: 20px;
-  text-align: center;
-}
-.small-text a{
   font-size: 12px;
   color: rgba(45, 45, 45, 0.5);
 }
