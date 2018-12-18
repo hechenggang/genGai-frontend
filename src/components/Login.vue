@@ -2,7 +2,6 @@
   <div class="full">
     <Header></Header>
     <div class="main">
-      <p v-if="notice" class="notice">{{notice}}</p>
       <div class="input-box">
         <p class="title">
           <span>登录</span>
@@ -28,16 +27,20 @@
         </p>
       </div>
     </div>
+    <Message :message="message"></Message>
   </div>
 </template>
 
 <script>
 import Header from "./Header.vue";
 import Config from "../config.js";
+import Message from './Message.vue';
+
 export default {
   name: "Login",
   components: {
-    Header
+    Header,
+    Message
   },
   created:function(){
     if(sessionStorage.getItem('auth')){
@@ -53,17 +56,11 @@ export default {
       mail: "",
       password: "",
       answer: "",
-      notice: "",
+      message:[0,''],
       Config: Config
     };
   },
-  watch: {
-    notice: function() {
-      setTimeout(() => {
-        this.notice = "";
-      }, 1000);
-    }
-  },
+
   methods: {
     // 准备数据
     login: function() {
@@ -77,13 +74,13 @@ export default {
       // 校验
       let is_correct_mail = postData.mail.match(/\w+@\w+\.\w+/g);
       if (!is_correct_mail) {
-        this.notice = "邮箱格式不正确喔。";
+        this.message = [2,'邮箱格式不正确'];
         return false;
       } else if (postData.password.length < 3) {
-        this.notice = "密码长度须大于叁。";
+        this.message = [2,'密码长度须大于3'];
         return false;
       } else if (postData.answer.length < 1) {
-        this.notice = "验证码不能为空。";
+        this.message = [2,'验证码不能为空'];
         return false;
       } else {
         // console.log(postData);
@@ -98,7 +95,7 @@ export default {
           .then(res => res.json())
           .then(res => {
             if (!res.ok) {
-              this.notice = res.message;
+              this.message = [2,res.message];
               this.loadVerificationCode();
             } else {
               // 记录密钥
@@ -117,7 +114,7 @@ export default {
             this.question = res.data.question;
             this.id = res.data.id;
           }else{
-            this.notice = '请求验证码失败。';
+            this.message = [2,'请求验证码失败'];
           }
         });
     }
@@ -168,8 +165,10 @@ export default {
 
 .input {
   margin: 0;
+  padding: 5px;
   font-size: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
+  border: 1px solid rgba(45, 45, 45, 0.5);
   border-radius: 0;
   width: 100%;
   outline: none;
@@ -231,7 +230,7 @@ export default {
 .small-text {
   border-top: 1px solid rgba(45, 45, 45, 0.2);
   padding: 5px;
-  margin-top: 20px;
+  margin-top: 16px;
   text-align: center;
 }
 .small-text a{

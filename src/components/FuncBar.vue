@@ -32,6 +32,8 @@ export default {
   margin: 0;
 
   background-color: rgba(45,45,45,0.98);
+
+  box-shadow: 0 0 5px rgba(145, 145, 145, 0.5);
 }
 .func  {
   display: table;

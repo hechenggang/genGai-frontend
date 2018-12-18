@@ -2,13 +2,9 @@
   <div class="full">
     <Header></Header>
     <div class="main">
-      <p v-if="notice" class="notice">{{notice}}</p>
       <div class="input-box">
         <p class="title">
           <span>找回密码</span>
-          <!-- <span class="small-text">
-            <router-link to="/login">登录</router-link>
-          </span> -->
         </p>
         <input v-model="mail" class="input" type="text" placeholder="邮箱">
         <div v-if="sended">
@@ -33,16 +29,19 @@
         </p>
       </div>
     </div>
+    <Message :message="message"></Message>
   </div>
 </template>
 
 <script>
 import Header from "./Header.vue";
 import Config from "../config.js";
+import Message from './Message.vue';
 export default {
   name: "Signup",
   components: {
-    Header
+    Header,
+    Message
   },
   beforeMount:function(){
     if(this.$route.query.mail&&this.$route.query.code){
@@ -64,7 +63,7 @@ export default {
       password: "",
       password2: "",
       answer: "",
-      notice: "",
+      message:[0,''],
       Config: Config,
       sended: false
     };
@@ -73,23 +72,14 @@ export default {
 
     password: function() {
       if (this.password != this.password2) {
-        this.notice = "两次密码不一致";
-      } else {
-        this.notice = "";
-      }
+        this.message = [2,'两次密码不一致'];
+      } 
     },
     password2: function() {
       if (this.password != this.password2) {
-        this.notice = "两次密码不一致";
-      } else {
-        this.notice = "";
-      }
+        this.message = [2,'两次密码不一致'];
+      } 
     },
-    notice: function() {
-      setTimeout(() => {
-        this.notice = "";
-      }, 1500);
-    }
   },
   methods: {
     request: function() {
@@ -107,19 +97,19 @@ export default {
       // 校验数据
       let is_correct_mail = postData.mail.match(/\w+@\w+\.\w+/g);
       if (!is_correct_mail) {
-        this.notice = "邮箱格式不正确。";
+        this.message = [2,'邮箱格式不正确'];
         return false;
       } else if (postData.answer.length < 1) {
-        this.notice = "验证码不能为空。";
+        this.message = [2,'验证码不能为空'];
         return false;
       }
 
       if (this.sended) {
-        if (postData.password.length < 3) {
-          this.notice = "密码长度须大于3。";
+        if (postData.password.length < 4) {
+          this.message = [2,'密码长度须大于3'];
           return false;
         } else if (this.password != this.password2) {
-          this.notice = "两次密码不一致";
+          this.message = [2,'两次密码不一致'];
           return false;
         }
       }
@@ -142,14 +132,14 @@ export default {
         .then(res => {
           if (!res.ok) {
             // 返回错误信息并重新请求验证码
-            this.notice = res.message;
+            this.message = [2,res.message];
             this.loadVerificationCode();
           } else {
             // 跳转
             if(!this.sended){
-              this.notice = "一个用来重置密码的链接以经发送到你的邮箱。";
+              this.message = [2,'重置邮件已发送'];
             }else{
-              this.notice = '重置成功，即将重定向到登录页面。';
+              this.message = [2,'重置成功，即将跳转'];
               setTimeout(()=>{
                 this.$router.push('/login');
               },1500)
@@ -166,7 +156,7 @@ export default {
             this.question = res.data.question;
             this.id = res.data.id;
           } else {
-            this.notice = "请求验证码失败。";
+            this.message = [2,'请求验证码失败'];
           }
         });
     }

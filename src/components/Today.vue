@@ -4,24 +4,26 @@
     <div class="main">
       
       <div class="today">
-        <p v-if="notice" class="notice">{{notice}}</p>
         <p class="date">今天是{{date}}，</p>
         <textarea v-model="content" class="content" rows="10"></textarea>
         <p class="btn" @click="save">保存</p>
         <p class="count">{{codeCount}}/200字</p>
-
       </div>
+      
     </div>
+    <Message :message="message"></Message>
   </div>
 </template>
 
 <script>
 import FuncBar from "./FuncBar.vue";
+import Message from './Message.vue'
 import Config from "../config.js";
 export default {
   name: "Today",
   components: {
-    FuncBar
+    FuncBar,
+    Message
   },
   created:function(){
     if(!this.get_auth()){
@@ -35,22 +37,16 @@ export default {
   data: function() {
     return {
       date:'',
-      notice: '',
       content: '',
       funcs:[
         {name:'今天',target:'/today'},
         {name:'历史',target:'/history'}
       ],
       count:0,
+      message:[0,''],
     };
   },
-  watch: {
-    notice: function() {
-      setTimeout(() => {
-        this.notice = "";
-      }, 1500);
-    }
-  },
+
   computed:{
     codeCount:function(){
       return this.content.length
@@ -89,7 +85,7 @@ export default {
       };
       
       if (postData.content.length < 1) {
-        this.notice = "不能提交空内容。";
+        this.message = [2,'不能提交空内容。'];
         return false;
       }  else {
         let url = Config.API.gateway + Config.API.save;
@@ -103,10 +99,9 @@ export default {
           .then(res => res.json())
           .then(res => {
             if (!res.ok) {
-              this.notice = '保存失败，'+res.message;
+              this.message = [2,'保存失败，'+res.message];
             } else {
-              // 跳转
-              this.notice = '保存成功。';
+              this.message = [2,'保存成功。'];
             }
           });
       }
@@ -135,19 +130,6 @@ export default {
       if(array.length == 2 && index == 0){
         num = '10';
       }
-      // let dic = {
-      //   '0':'零',
-      //   '1':'壹',
-      //   '2':'贰',
-      //   '3':'叁',
-      //   '4':'肆',
-      //   '5':'伍',
-      //   '6':'陆',
-      //   '7':'柒',
-      //   '8':'捌',
-      //   '9':'玖',
-      //   '10':'拾'
-      // }
       let dic = {
         '0':'零',
         '1':'一',
@@ -211,7 +193,7 @@ export default {
   float: right;
 }
 
-.notice {
+.notice-today {
   color: #cc5229;
 }
 

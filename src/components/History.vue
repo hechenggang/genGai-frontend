@@ -111,9 +111,9 @@ export default {
 .day {
   position: relative;
   list-style: none;
-  margin: 1rem 0;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(12, 12, 12, .5);
+  margin-top: 15px;
+  padding: 10px;
+  box-shadow: 0 0 5px rgba(145, 145, 145, 0.5);
 }
 
 .text {
