@@ -16,6 +16,7 @@ export default {
 
 * {
   box-sizing: border-box;
+  font-size: 17px;
 }
 body {
   margin: 0;

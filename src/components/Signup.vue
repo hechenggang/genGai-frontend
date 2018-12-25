@@ -17,25 +17,22 @@
             <p class="question">
               <img :src="Config.API.gateway+Config.API.get_verification_img+id">
             </p>
-            <input v-model="answer" class="answer" type="text">
+            <input @keypress.enter="signup" v-model="answer" class="answer" type="text">
           </span>
           <a class="btn_01" @click="signup">注册</a>
         </p>
       </div>
     </div>
-    <Message :message="message"></Message>
   </div>
 </template>
 
 <script>
 import Header from "./Header.vue";
 import Config from "../config.js";
-import Message from './Message.vue';
 export default {
   name: "Signup",
   components: {
-    Header,
-    Message
+    Header
   },
   mounted: function() {
     this.loadVerificationCode();
@@ -48,20 +45,19 @@ export default {
       password2: "",
       answer: "",
       Config: Config,
-      message:[0,''],
     };
   },
   watch: {
     password: function() {
       if (this.password != this.password2) {
-        this.message = [.5,'两次密码不一致'];
+        this.$push_message({text:'两次密码不一致',duration:1000});
       }
     },
     password2: function() {
       if (this.password != this.password2) {
-        this.message = [.5,'两次密码不一致'];
-      } 
-    },
+        this.$push_message({text:'两次密码不一致',duration:1000});
+      }
+    }
   },
   methods: {
     signup: function() {
@@ -76,16 +72,16 @@ export default {
       // 校验数据
       let is_correct_mail = postData.mail.match(/\w+@\w+\.\w+/g);
       if (!is_correct_mail) {
-        this.message = [2,'邮箱格式不正确'];
+        this.$push_message({text:'邮箱格式不正确',duration:2000});
         return false;
       } else if (postData.password.length < 4) {
-        this.message = [2,'密码长度须大于3'];
+        this.$push_message({text:'密码长度须大于3',duration:2000});
         return false;
       } else if (postData.answer.length < 1) {
-        this.message = [2,'验证码不能为空'];
+        this.$push_message({text:'验证码不能为空',duration:2000});
         return false;
       } else if (this.password != this.password2) {
-        this.message = [.5,'两次密码不一致'];
+        this.$push_message({text:'两次密码不一致',duration:2000});
         return false;
       } else {
         // 开始请求服务器
@@ -101,14 +97,15 @@ export default {
           .then(res => {
             if (!res.ok) {
               // 返回错误信息并重新请求验证码
-              this.message = [2,res.message];
+              this.$push_message({text:res.message,duration:2000});
               this.loadVerificationCode();
+              this.answer = '';
             } else {
               // 跳转
-              this.message = [2,'注册成功，即将跳转'];
-              setTimeout(()=>{
-                this.$router.push('/login');
-              },1500)
+              this.$push_message({text:'注册成功，即将跳转',duration:2000});
+              setTimeout(() => {
+                this.$router.push("/login");
+              }, 1500);
             }
           });
       }
@@ -120,8 +117,8 @@ export default {
           if (res.ok) {
             this.question = res.data.question;
             this.id = res.data.id;
-          }else{
-            this.message = [2,'请求验证码失败'];
+          } else {
+            this.$push_message({text:'请求验证码失败',duration:2000});
           }
         });
     }
@@ -130,5 +127,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

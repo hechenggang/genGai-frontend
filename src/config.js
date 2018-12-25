@@ -1,6 +1,7 @@
 export default {
   API:{
-    gateway:'https://gengai-api.d-c.bid',
+    // gateway:'http://127.0.0.1:10080',
+    gateway:'https://gengai-api.imhcg.cn',
     get_verification_code:'/verification/get',
     test_verification_code:'/verification/test',
     get_verification_img:'/verification/img/',

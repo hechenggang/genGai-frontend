@@ -3,9 +3,7 @@
     <Header></Header>
     <div class="main">
       <div class="input-box">
-        <p class="title">
-          <span>登录</span>
-        </p>
+        <p class="title">登录</p>
         <input v-model="mail" class="input" type="text" placeholder="邮箱">
         <input v-model="password" class="input" type="password" placeholder="密码">
         <p class="check">
@@ -18,33 +16,30 @@
             <p class="question">
               <img :src="Config.API.gateway+Config.API.get_verification_img+id">
             </p>
-            <input v-model="answer" class="answer" type="text">
+            <input @keypress.enter="login" v-model="answer" class="answer" type="text">
           </span>
           <a class="btn_01" @click="login">登录</a>
         </p>
         <p class="small-text">
-            <router-link to="/forget">忘记密码？</router-link>
+          <router-link to="/forget">忘记密码？</router-link>
         </p>
       </div>
     </div>
-    <Message :message="message"></Message>
   </div>
 </template>
 
 <script>
 import Header from "./Header.vue";
 import Config from "../config.js";
-import Message from './Message.vue';
 
 export default {
   name: "Login",
   components: {
-    Header,
-    Message
+    Header
   },
-  created:function(){
-    if(sessionStorage.getItem('auth')){
-      this.$router.push('today');
+  created: function() {
+    if (sessionStorage.getItem("auth")) {
+      this.$router.push("today");
     }
   },
   mounted: function() {
@@ -56,7 +51,7 @@ export default {
       mail: "",
       password: "",
       answer: "",
-      message:[0,''],
+      message: [0, ""],
       Config: Config
     };
   },
@@ -74,13 +69,13 @@ export default {
       // 校验
       let is_correct_mail = postData.mail.match(/\w+@\w+\.\w+/g);
       if (!is_correct_mail) {
-        this.message = [2,'邮箱格式不正确'];
+        this.$push_message({ text: "邮箱格式不正确", duration: 2000 });
         return false;
       } else if (postData.password.length < 3) {
-        this.message = [2,'密码长度须大于3'];
+        this.$push_message({ text: "密码长度须大于3", duration: 2000 });
         return false;
       } else if (postData.answer.length < 1) {
-        this.message = [2,'验证码不能为空'];
+        this.$push_message({ text: "验证码不能为空", duration: 2000 });
         return false;
       } else {
         // console.log(postData);
@@ -95,13 +90,14 @@ export default {
           .then(res => res.json())
           .then(res => {
             if (!res.ok) {
-              this.message = [2,res.message];
+              this.$push_message({ text: res.message, duration: 2000 });
+              this.answer = "";
               this.loadVerificationCode();
             } else {
               // 记录密钥
-              sessionStorage.setItem('auth',res.data.auth)
+              sessionStorage.setItem("auth", res.data.auth);
               // 跳转
-              this.$router.push('/today');
+              this.$router.push("/today");
             }
           });
       }
@@ -113,8 +109,9 @@ export default {
           if (res.ok) {
             this.question = res.data.question;
             this.id = res.data.id;
-          }else{
-            this.message = [2,'请求验证码失败'];
+          } else {
+            this.$push_message({ text: "请求验证码失败", duration: 2000 });
+            this.message = [2, ""];
           }
         });
     }
@@ -159,7 +156,7 @@ export default {
 .input-box .title {
   margin: 0;
   padding: 0.5rem;
-  font-size: 1.2rem;
+  font-size: 20px;
   text-align: center;
 }
 
@@ -188,7 +185,6 @@ export default {
   left: 0;
   width: 63px;
   height: 25px;
-  
 }
 
 .question img {
@@ -218,7 +214,7 @@ export default {
   right: 0;
   width: 40px;
   height: 25px;
-  
+
   margin: 0;
   padding: 0 2.5px;
   font-size: 15px;
@@ -233,7 +229,7 @@ export default {
   margin-top: 16px;
   text-align: center;
 }
-.small-text a{
+.small-text a {
   font-size: 12px;
   color: rgba(45, 45, 45, 0.5);
 }

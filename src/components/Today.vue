@@ -2,32 +2,27 @@
   <div class="full">
     <FuncBar></FuncBar>
     <div class="main">
-      
       <div class="today">
         <p class="date">今天是{{date}}，</p>
-        <textarea v-model="content" class="content" rows="10"></textarea>
+        <textarea v-model="content" @keypress.enter="save" class="content" rows="10"></textarea>
         <p class="btn" @click="save">保存</p>
         <p class="count">{{codeCount}}/200字</p>
       </div>
-      
     </div>
-    <Message :message="message"></Message>
   </div>
 </template>
 
 <script>
 import FuncBar from "./FuncBar.vue";
-import Message from './Message.vue'
 import Config from "../config.js";
 export default {
   name: "Today",
   components: {
-    FuncBar,
-    Message
+    FuncBar
   },
-  created:function(){
-    if(!this.get_auth()){
-      this.$router.push('/login');
+  created: function() {
+    if (!this.get_auth()) {
+      this.$router.push("/login");
     }
   },
   mounted: function() {
@@ -36,27 +31,26 @@ export default {
   },
   data: function() {
     return {
-      date:'',
-      content: '',
-      funcs:[
-        {name:'今天',target:'/today'},
-        {name:'历史',target:'/history'}
+      date: "",
+      content: "",
+      funcs: [
+        { name: "今天", target: "/today" },
+        { name: "历史", target: "/history" }
       ],
-      count:0,
-      message:[0,''],
+      count: 0,
     };
   },
 
-  computed:{
-    codeCount:function(){
-      return this.content.length
+  computed: {
+    codeCount: function() {
+      return this.content.length;
     }
   },
   methods: {
     // 准备数据
     load: function() {
-      let auth = this.get_auth()
-      let postData = {auth};
+      let auth = this.get_auth();
+      let postData = { auth };
       let url = Config.API.gateway + Config.API.today;
       fetch(url, {
         method: "post",
@@ -69,13 +63,13 @@ export default {
         .then(res => {
           if (!res.ok) {
             this.today = false;
-            this.content = '';
+            this.content = "";
           } else {
             // 跳转
             this.today = true;
             this.content = res.data.content;
           }
-        })
+        });
     },
     // 提交数据
     save: function() {
@@ -83,11 +77,11 @@ export default {
         auth: this.get_auth(),
         content: this.content
       };
-      
+
       if (postData.content.length < 1) {
-        this.message = [2,'不能提交空内容。'];
+        this.$push_message({ text: "不能提交空内容", duration: 2000 });
         return false;
-      }  else {
+      } else {
         let url = Config.API.gateway + Config.API.save;
         fetch(url, {
           method: "post",
@@ -99,59 +93,35 @@ export default {
           .then(res => res.json())
           .then(res => {
             if (!res.ok) {
-              this.message = [2,'保存失败，'+res.message];
+              this.$push_message({
+                text: "保存失败，" + res.message,
+                duration: 2000
+              });
             } else {
-              this.message = [2,'保存成功。'];
+              this.$push_message({ text: "保存成功", duration: 2000 });
             }
           });
       }
     },
-    get_auth:function(){
-      let auth = sessionStorage.getItem('auth');
-      if (auth){
-        return auth
+    get_auth: function() {
+      let auth = sessionStorage.getItem("auth");
+      if (auth) {
+        return auth;
       }
-      return false
+      return false;
     },
-    get_date:function(){
+    get_date: function() {
       let date = new Date();
-      let year = Array.from(String(date.getFullYear())).map(num=>{
-        return this.to_chinese(num);
-      }).join('') ;
-      let month = Array.from(String(date.getMonth())).map((num,index,array)=>{
-        return this.to_chinese(num,index,array);
-      }).join('') ;
-      let day = Array.from(String(date.getDate())).map((num,index,array)=>{
-        return this.to_chinese(num,index,array);
-      }).join('') ;
-      this.date = (year+'年'+month+'月'+day+'日');
+      let year = date.getFullYear();
+      let month = Number.parseInt(date.getMonth())+1;
+      let day = date.getDate();
+      this.date = year + "年" + month + "月" + day + "日";
     },
-    to_chinese:function(num,index=false,array=false){
-      if(array.length == 2 && index == 0){
-        num = '10';
-      }
-      let dic = {
-        '0':'零',
-        '1':'一',
-        '2':'二',
-        '3':'三',
-        '4':'四',
-        '5':'五',
-        '6':'六',
-        '7':'七',
-        '8':'八',
-        '9':'九',
-        '10':'十'
-      }
-      return dic[num]
-    }
   }
 };
 </script>
 
 <style scoped>
-
-
 .main {
   position: fixed;
   top: 0;
@@ -170,19 +140,22 @@ export default {
   padding: 50px;
   margin: 0;
 }
-@media screen and (max-width: 720px){
+@media screen and (max-width: 720px) {
   .today {
     padding: 10px;
   }
 }
+
 .content {
   width: 100%;
-  padding: 0.5rem;
-  font-size: 1rem;
+  padding: 7.5px;
+  border-radius: 0;
+  border: 1px solid rgba(45, 45, 45, 0.98);
 }
 
-.btn,.count {
-  margin: .5rem 0;
+.btn,
+.count {
+  margin: 0.5rem 0;
   display: inline-block;
   padding: 0 0.2rem;
   border: 1px solid rgba(45, 45, 45, 0.98);
@@ -198,7 +171,7 @@ export default {
 }
 
 .date {
-  margin: .5rem 0;
-  font-size: 1rem;
+  margin: 0;
+  padding: 7.5px;
 }
 </style>

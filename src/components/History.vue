@@ -34,7 +34,8 @@ export default {
   },
   data: function() {
     return {
-      history: []
+      history: [],
+      message: [0, ""],
     };
   },
 
@@ -54,7 +55,7 @@ export default {
         .then(res => res.json())
         .then(res => {
           if (!res.ok) {
-            console("获取历史纪录失败");
+            this.$push_message({text:'没有找到历史纪录',duration:2000});
           } else {
             // 跳转
             this.history = res.data.history;
@@ -75,7 +76,7 @@ export default {
         date = new Date(timestamp);
       }
       let year = date.getFullYear();
-      let month = date.getMonth();
+      let month = Number.parseInt(date.getMonth())+1;
       let day = date.getDate();
       return [year, month, day];
     }
@@ -103,28 +104,30 @@ export default {
   margin: 0;
   overflow-y: auto;
 }
-@media screen and (max-width: 720px){
+@media screen and (max-width: 720px) {
   .history {
-    padding: 10px;
+    padding: 7.5px;
   }
 }
 .day {
   position: relative;
   list-style: none;
-  margin-top: 15px;
+  margin-bottom: 15px;
   padding: 10px;
   box-shadow: 0 0 5px rgba(145, 145, 145, 0.5);
 }
 
 .text {
   margin: 0;
-  color: rgba(12, 12, 12, .8);
+  color: rgba(12, 12, 12, 0.8);
 }
 
 .date {
-  color: rgba(12, 12, 12, .5);
-  font-size: 0.8rem;
+  color: rgba(12, 12, 12, 0.5);
   margin: 0;
-  margin-bottom: .2rem; 
+}
+
+.date span {
+  font-size: 13px;
 }
 </style>
