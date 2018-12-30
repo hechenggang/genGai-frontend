@@ -3,6 +3,9 @@
     <li class="func" v-for="func in funcs" :key="func.target">
       <router-link :to="func.target">{{func.name}}</router-link>
     </li>
+    <router-link to="/setting" title="设置">
+    <span class="setting"></span>
+    </router-link>
   </ul>
 </template>
 
@@ -21,6 +24,19 @@ export default {
 </script>
 
 <style scoped>
+
+.setting {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  bottom: 0;
+  display: table;
+  background: url(https://cdn.imhcg.cn/html/icon/setting_002.svg);
+  background-size: 45%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .funcs {
   position: fixed;
   top: 0;

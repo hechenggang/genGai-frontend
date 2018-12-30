@@ -65,7 +65,7 @@ export default {
   text-align: center;
   margin: 0;
   line-height: 50px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgb(255, 255, 255);
 }
 
 .slide-fade-enter-active {

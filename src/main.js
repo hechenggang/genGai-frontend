@@ -12,6 +12,7 @@ import Signup from './components/Signup.vue';
 import Today from './components/Today.vue';
 import _History from './components/History.vue';
 import Forget from './components/Forget.vue';
+import Setting  from './components/Setting.vue';
 
 // 新建路由所需参数
 let routes = [
@@ -20,7 +21,9 @@ let routes = [
   { path: '/signup', component: Signup },
   { path: '/today', component: Today },
   { path: '/history', component: _History },
-  { path: '/forget', component: Forget }
+  { path: '/forget', component: Forget },
+  { path: '/setting', component: Setting },
+
 ];
 
 // 实例化路由

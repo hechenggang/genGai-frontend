@@ -150,15 +150,20 @@ export default {
   width: 100%;
   padding: 7.5px;
   border-radius: 0;
-  border: 1px solid rgba(45, 45, 45, 0.98);
+  /* border: 1px solid rgba(45, 45, 45, 0.98); */
+  background-color: transparent;
+  box-shadow: 0 0 5px rgba(145, 145, 145, 0.5);
+  border: none;
 }
 
 .btn,
 .count {
   margin: 0.5rem 0;
   display: inline-block;
-  padding: 0 0.2rem;
-  border: 1px solid rgba(45, 45, 45, 0.98);
+  padding: 0 0.5rem;
+  border: none;
+  box-shadow: 0 0 5px rgba(145, 145, 145, 0.5);
+  color: rgb(145, 145, 145);
   cursor: pointer;
 }
 
