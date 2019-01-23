@@ -5,7 +5,7 @@
       <div class="setting">
         <p class="date">日记设置</p>
         <div class="btns">
-          <p class="btn" @click="dn_history">导出</p>
+          <p class="btn" @click.once="dn_history">导出</p>
           <div class="btns">
             <p class="btn" @click="read_json">导入</p>
             <input id="input-history" type="file">
@@ -44,9 +44,15 @@ export default {
       let file = document.querySelector("#input-history").files[0];
       if (!file) {
         this.$push_message({ text: "请先选择一个备份文件", duration: 2000 });
+        return false;
+      }
+      if (!file.type) {
+        this.$push_message({ text: "错误的文件类型", duration: 2000 });
+        return false;
       }
 
       if (/json/.test(file.type)) {
+        console.log('读取json文件');
         let reader = new FileReader();
         let push = this.$push_message;
         let update_history = this.update_history;
@@ -54,11 +60,21 @@ export default {
           let data = false;
           try {
             data = JSON.parse(this.result);
-          } catch (e) {}
-
-          if (!data) {
-            push({ text: "备份文件校验失败", duration: 2000 });
+          } catch (e) {
+            console.log('格式化json失败')
           }
+
+          // 校验数据
+          if (!data) {
+            push({ text: "文件读取失败", duration: 2000 });
+            return false
+          }
+          if(!data.length){
+            push({ text: "备份文件校验失败", duration: 2000 });
+            return false
+          }
+
+          console.log('遍历并校验');
           for (let i = 0; i < data.length; i++) {
             if (
               !(
@@ -71,9 +87,14 @@ export default {
               return false;
             }
           }
+
+          console.log('开始上传数据');
           update_history(data);
         };
         reader.readAsText(file);
+      } else {
+        this.$push_message({ text: "错误的文件类型", duration: 2000 });
+        return false;
       }
     },
     update_history: function(data) {
@@ -113,16 +134,18 @@ export default {
     user_clean: function() {
       let auth = sessionStorage.getItem("auth");
       let link = Config.API.gateway + Config.API.user_clean + auth;
-      let confi = confirm("确定要停用账户吗？\n你的所有的资料都将被删除且不能恢复。");
+      let confi = confirm(
+        "确定要停用账户吗？\n你的账户及所有记录都将被删除且无法恢复。"
+      );
       if (confi) {
         fetch(link)
           .then(res => res.json())
           .then(res => {
             this.$push_message({ text: res.message, duration: 2000 });
-            setTimeout(()=>{
+            setTimeout(() => {
               sessionStorage.clear();
-              location.assign('./#/');
-            },2000)
+              location.assign("./#/");
+            }, 2000);
           });
       } else {
         this.$push_message({ text: "停用终止", duration: 2000 });

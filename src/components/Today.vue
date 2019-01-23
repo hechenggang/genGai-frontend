@@ -150,23 +150,24 @@ export default {
   width: 100%;
   padding: 7.5px;
   border-radius: 0;
-  /* border: 1px solid rgba(45, 45, 45, 0.98); */
   background-color: transparent;
-  box-shadow: 0 0 5px rgba(145, 145, 145, 0.5);
-  border: none;
+  /* box-shadow: 0 0 5px rgba(145, 145, 145, 0.5); */
+  border: 1px solid rgba(145, 145, 145, 0.5);
+  outline: none;
+  font-size: 1rem;
+  font-family: inherit;
 }
 
 .btn,
 .count {
-  margin: 0.5rem 0;
+  /* box-shadow: 0 0 5px rgba(145, 145, 145, 0.2); */
   display: inline-block;
-  padding: 0 0.5rem;
-  border: none;
-  box-shadow: 0 0 5px rgba(145, 145, 145, 0.5);
-  color: rgb(145, 145, 145);
+  margin: 0;
+  margin-top: 0.25rem;
+  padding: 0.25rem 7.5px;
+  border: 1px solid rgba(145, 145, 145, 0.5);
   cursor: pointer;
 }
-
 .count {
   float: right;
 }

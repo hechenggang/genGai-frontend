@@ -3,6 +3,7 @@
     <FuncBar></FuncBar>
     <div class="main">
       <ul class="history">
+        
         <li v-for="day in history" class="day" :key="day[0]">
           <p class="date">
             <span>{{get_date(day[1])[0]}}-</span>
@@ -11,6 +12,8 @@
           </p>
           <p class="text">{{day[2]}}</p>
         </li>
+        <p class="center-text">已经为自己记录了 {{history.length}} 天，加油！</p>
+
       </ul>
     </div>
   </div>
@@ -129,5 +132,10 @@ export default {
 
 .date span {
   font-size: 13px;
+}
+.center-text {
+  text-align: center;
+  font-size: .9rem;
+  color: #ccc;
 }
 </style>
